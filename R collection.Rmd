@@ -1,0 +1,846 @@
+---
+title: "R collection"
+author: "meeting"
+date: "2020/5/2"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## __Vector__ 
+> 1. __simple patterned vectors__
+
+- construct a vecctor
+  
+seq()中的參數by指每個數字個0.5; 參數length.out指將數字範圍平分成幾個區塊段
+```{r}
+seq(1, 5)
+rep(3, 12)
+```
+
+先用NA建一個空的vector會比較清楚
+```{r}
+a <- c(3,5,9,10)
+V <- rep(NA, 7)
+V[1:4] <- a
+V
+```
+- unique()回傳所有不重複的元素
+```{r}
+b <- c(3, 3, 3, 3, 5, 5, 1, 2, 10, 10, 8)
+unique(b)
+```
+- table()計算vector中的元素各有幾個
+```{r}
+table(b)
+```
+- union()為聯集
+`B <- c(3, 1, 5, 4, 7)`
+`C <- c(23, 1, 44, 5, 3)`
+```{r, echo=FALSE}
+B <- c(3, 1, 5, 4, 7)
+C <- c(23, 1, 44, 5, 3)
+```
+
+```{r}
+union(B, C)
+```
+- intersect()
+```{r}
+intersect(B, C)
+```
+- sort(x, decreasing = False, ...) 回傳排序後的元素
+
+`a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)`
+```{r,echo=FALSE}
+a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
+```
+```{r}
+sort(a)
+sort(a, decreasing = TRUE)
+```
+- order(..., na.list = TRUE, decreasing = FALSE) 回傳排序後的元素`編號`
+```{r}
+order(a)
+order(a, decreasing = TRUE)
+```
+- __changing__ values in a vector can
+```{r}
+a[5] <- -3
+a[8] <- -1
+a
+```
+- __deleting__ element from a vector
+
+  刪掉該位置的元素
+```{r}
+a[-2]
+a[-c(3:6)]
+```
+- __“is.”__ series
+
+is.integer
+is.numeric
+is.double
+is.character
+```{r}
+is.null(c())
+x1 <- 1:5
+x3 <- colors
+c(is.integer(x1), is.numeric(x1), is.double(x1))
+c(is.character(x3), is.numeric(x3))
+
+```
+
+as.numeric
+```{r}
+c(TRUE, FALSE, T, F)
+c(3<5, 3>5, 3==5, 3!=5)
+logical <- c(3<5, 3>5, 3==5, 3!=5)
+logical
+logical == TRUE
+as.numeric(logical)
+sum(logical == TRUE)  ## logical裡有幾個TRUE
+sum(logical)  ## 相當於sum(logical == TRUE)
+```
+
+is.na
+```{r}
+B <- c(2, NA, 5 , 10)
+is.na(B)
+# TRUE
+which(is.na(B))
+which(is.na(B) == 1)
+ind.T <- which(is.na(B))
+B1 <- B[-ind.T]
+B1
+# FALSE
+which(!is.na(B))
+which(is.na(B) == 0)
+```
+__<Example 1>__
+```{r}
+A <- c(3, 4, NA, 12, 0.2, NA, -2)
+B <- c(3, 5, "red", 4, NA)
+# (1)
+is.numeric(A)
+is.numeric(B)
+# (2)
+sum(is.na(A))
+sum(is.na(B))
+# (3)
+which(is.na(A))
+which(is.na(B))
+# (4)
+which(A < 1)
+which(B < 1)
+which(B < 5)
+```
+- class
+```{r}
+a <- c(3, 4, 2, 7, 10, 23, 8, 9, 11)
+b <- c("red", "yellow", "blue")
+c <- c(TRUE, FALSE)
+c(class(a), class(b), class(c))
+```
+
+- - -
+## __matrix__
+> 1. __construct a matrix__
+
+  - rbind中每個數列代表一列;cbind中每個數列代表一行
+```{r}
+a <- 1:5; b <- 6:10;
+c <- 11:15; d <- 16:20
+M1 <- rbind(a,b,c,d)
+M1
+M2 <- cbind(a,b,c,d)
+M2
+```
+- `X <- 1:20`
+```{r, echo=FALSE}
+X <- 1:20
+```
+
+```{r}
+matrix(X, nrow = 4, ncol = 5)
+matrix(X, nrow = 5, ncol = 4)
+```
+
+
+```{r}
+matrix(X, nrow = 4, ncol = 5, byrow = TRUE)
+matrix(X, nrow = 5, ncol = 4, byrow = TRUE)
+```
+> 2. features for a matrix
+
+```{r}
+M1
+```
+
+```{r}
+
+dim(M1)
+colnames(M1);rownames(M1)
+colnames(M1) <- c("V1", "V2", "V3", "V4", "V5")
+dimnames(M1)
+```
+
+
+- Extract elements from a matrix
+
+取M1中的第2列第4行的元素
+```{r}
+M1[2, 4]
+```
+
+```{r}
+M1[c(2, 4), 3]
+M1[c(2, 4), c(3, 5)]
+M1[c(2,3), ]
+M1[c("b", "c"), ]
+M1[5] #M1[1,2]
+```
+
+> 3. Evaluation of Matrix
+
+- statistics description
+
+```{R}
+A <- matrix(c(1:5, 7:10), 3, 3)
+A
+colSums(A)
+rowSums(A)
+colMeans(A)
+rowMeans(A)
+```
+- transpose
+```{r}
+t(A)
+```
+- calculation
+```{r}
+diag(A)
+det(A)
+```
+-   $A^{-1}$ is an inverse matrix of A: $AA^{−1} = I$
+```{r}
+solve(A)
+```
+- eigen system
+```{r}
+D <- matrix(rnorm(9), 3, 3)
+eig.D <- eigen(D)
+eig.D$values
+eig.D$vectors
+```
+
+
+4. 
+$\left[
+\begin{array}{cc}
+A & B \\
+C & D \\
+\end{array}
+\right]$
+
+- - -
+## __Control Flow__
+
+> 1. The for() loop
+
+    `for (index in vector) commands`
+
+- notes
+  - for迴圈很浪費資源 不一定會比較快
+  - 多多善用vector
+- __<Example 1>__
+
+Construct a vector as Xn+1 = 2Xn + 3,where X0 = 3, n = 1, 2, 3, 4, 5, 6, 7
+```{r}
+vec.X.v1 <- c()
+Xn <- 3
+for(n in 1:7){
+Xn <- 2*Xn + 3
+vec.X.v1 <- c(vec.X.v1, Xn)
+}
+vec.X.v1
+```
+
+- __<Example 2>__
+  
+n! = n ∗ (n − 1) ∗ (n − 2) ∗ · · · ∗ 2 ∗ 1
+```{r}
+# Try n = 10.
+n <- 10
+ans <- 1
+for(j in n:1){
+ans <- ans * j
+}
+ans
+factorial(n)
+
+```
+- __<Example 3>__
+
+Find the first 12 values in the Fibonacci sequence.
+Let F1 = 1 and F2 = 1.
+
+Fn+2 = Fn+1 + Fn, n = 1, 2, 3, ..., 10
+```{r}
+f1 <- 1
+f2 <- 1
+all <- rep(NA, 12)
+all[1] <- f1
+all[2] <- f2
+for(n in 3:12){
+  k = f1+f2
+  f1 <- f2
+  f2 <- k
+  all[n] <- k
+}
+all
+```
+
+
+> 2. The if() statement
+
+`if (condition) {commands when TRUE}`
+`if (condition) {commands when TRUE} else {commands when FALSE}`
+
+- __<Example 1>__
+```{r}
+a <- 2
+b <- 2
+if(a == b){
+  a*b
+  c <- a*b
+} else if(a==2){
+  c <- 2
+} else{
+  c <- a+b
+}
+# R裡的空格沒有意義
+
+if(a==b) c <- a*b
+# if只有一個敘述且沒有else才能這樣寫
+```
+
+- __<Example 2>__
+
+Given C = {3, 5, NA, 12, 0.2, NA, −2}, find the locations of NA
+```{r}
+C <- c(3, 4, NA, 12, 0.2, NA, -2)
+for(i in 1:7){
+if(is.na(C[i])) print(i)
+}
+```
+```{r}
+na.loc <- c()
+for(i in 1:7){
+if(is.na(C[i])) 
+  na.loc <- c(na.loc, i)
+}
+na.loc
+
+```
+
+> 3. The while() loop
+
+`while (condition) statements`
+```{r}
+j <- 1
+while(j <= 8){
+print(j)
+j <- j + 1
+}
+```
+- __<Example 1>__
+
+Rolling a fair dice, evaluate the total number that all possible outcomes
+occur at least once. Start from the seed 20191025.
+Use sample(1:6, 1) to simulate a outcome of rolling a fair dice.
+```{r}
+runif(1)
+set.seed(20200503)
+t <- c()
+while (length(unique(t)) < 6){
+  X <- sample(1:6, 1)
+  t <- c(t, X)
+}
+
+length(t)
+```
+
+> 4. break & repeat & next
+
+- break
+`if (condition) break`
+
+- repeat
+`repeat { statements }`
+
+- next
+
+- - -
+## __Function__
+
+> 1. source()
+
+`print( ) shows with " " between characters.`
+`cat() shows without " " between characters.`
+```{r}
+x <- c("A", "B", "C", "D")
+print(x)
+cat(x)
+```
+> 2. function()
+
+- __<Example 1>__
+
+$f (x) = 3x + 2, x=2,3,4$
+
+```{r}
+f <- function(x){
+3*x + 2
+}
+f(2)
+```
+- `return` in the function()
+```{r}
+f <- function(x){
+res <- 3*x + 2
+}
+f(2)
+# return nothing
+```
+```{r}
+f <- function(x){
+res <- 3*x + 2
+return (res) # return the output
+}
+f(2)
+```
+
+> 3. list
+
+`$: the name of the element.`
+`[[ ]]: the location or the name of the element.`
+
+- __<Example 1>__
+```{r}
+X <- list(a = 3, b = c(1:5), c = c("A", "B"))
+X
+```
+```{r}
+X$a
+X[[2]]
+X[["c"]]
+```
+
+- creat a list
+```{r}
+try.list <- list() ## a null list
+length(try.list)
+length(try.list) <- 2 ## assign the size to the list
+try.list[[1]] <- seq(0, 10, length.out = 3) ## without name
+try.list$square <- seq(0, 10, length.out = 3)^2 ## with name
+try.list
+```
+
+
+> 4. Use `invisible( )` to hide some output.
+
+```{r}
+perfect.number <- function(a, b){
+k <- a
+res <- c()
+ans <- list()
+while(k < b){
+fac <- c()
+for(j in 1:k){
+if((k %% j) == 0) fac <- c(fac, j)
+}
+if(k == sum(fac[-length(fac)])) {
+res <- c(res, k)
+ans[[paste(k)]] <- fac[-length(fac)]
+}
+k <- k+1
+}
+print(res)
+ans$number <- res
+return(invisible(ans)) # do not show the output
+}
+```
+
+- - - 
+
+## __Data Frame__
+
+> 1. __`data.frame()`__
+
+- __<Example 1>__
+
+```{r}
+colors <- c("red", "yellow", "blue")
+numbers <- c(1, 2, 3)
+colors.and.numbers <- data.frame(colors, numbers,
+more.numbers = c(4, 5, 6))
+colors.and.numbers
+```
+- __difference with matrix__
+    - These are like matrices, but with the columns having their own names.
+    - Columns can be of different types from each other.
+
+> 2. __types in a data frame: chracter__
+
+Change the type from factor to character by using `stringAsFactors =FALSE`
+```{r}
+colors <- c("red", "yellow", "blue")
+numbers <- c(1, 2, 3)
+colors.and.numbers <- data.frame(colors, numbers,
+more.numbers = c(4, 5, 6),
+stringsAsFactors = FALSE)
+str(colors.and.numbers)
+```
+> 3. add rows/columns
+
+  - row: use `rbind()`
+  - column: use the sign `$` or `cbind()`
+```{r}
+data2 <- data.frame(colors, numbers, more.numbers = c(4, 5, 6),
+stringsAsFactors = FALSE)
+data2 <- rbind(data2, c("black", 4, 7))
+data2$new.column <- c('a','b','c','d')
+data2
+```
+> 4. Data input and output at hard disk
+
+- Change the directory: __`setwd(“dir”)`__
+- Find the directory: __`get()`__
+- To save all objects in the current workspace, type __`save.image(“XXX.RData”)`__
+- To save parts of objects, type __`save(a, b, c, file = “XXX.RData”)`__ 
+- Use __`load(“XXX.RData”)`__ to retrieve data.
+- Save data to a file
+  - __`write.table(A, file = “XXX.txt”)`__
+  - __`write.csv(A, file = “XXX.csv”)`__
+- Read data from a file
+  - __`read.table(file = “XXX.txt”)`__
+  - __`read.csv(file = “XXX.csv”)`__
+
+> 5. R Package
+
+- To download a package, type __`install.packages(“XXX”)`__
+- Before using some functions in a downloaded package, you should call
+the package by typing __`library(XXX)`__
+
+> 6. Tools for help
+- typee __`help(name)`__ or __`?name`__
+
+- - -
+## __R Graphics__
+> 1. Graphics for descriptive statistics
+
+- Histogram: hist(x)
+```{r}
+x.norm <- rnorm(100, mean=0, sd=1)
+hist(x.norm)
+```
+- Boxplot: boxplot(x)
+```{r}
+boxplot(x.norm)
+```
+- Density plot: plot(density(x))
+```{r}
+plot(density(x.norm))
+```
+- Barchart: barplot(x)
+```{r}
+x <- sample(c(1:8), 100, replace=TRUE, prob=c(8:1))
+x <- table(x)
+names(x) <- c("A", "B", "C", "D", "E", "F", "G", "H")
+barplot(x)
+```
+- Piechart: pie(x)
+```{r}
+pie(x)
+```
+
+- plot(x, y)
+```{r}
+x <- rnorm(100)
+y <- 3*x + rnorm(100, 0, 1)
+plot(x, y)
+cor(x, y)
+
+```
+- Scatter plots for multiple variables: pairs(...)
+```{r}
+X <- matrix(rnorm(30), 10, 3) ## use matrix
+pairs(X, pch = 19)
+```
+- Boxplot for multiple categories: boxplot(x)
+```{r}
+X <- data.frame(group = rep(c("A", "B", "C", "D", "E"), each = 10),
+res = rnorm(50))
+boxplot(res ~ group, data = X)
+```
+> 2. general plot function: plot(...)
+
+```{D3}
+par(mfrow = c(2,3)) # split plot ranges
+plot(x, y,
+type = "p", ### types of the plot
+pch = , ### the symbol in the plot
+main = NULL, ### the title of the plot
+lty = , ### the style of a line
+lwd = , ### the width of a line
+cex = , ### the size of an text
+bty="o", ### the box around the plot
+col = , ### the color of an object
+xlim = NULL, ylim = NULL, # the range of an axis
+sub = NULL, ### the sub-title of the plot
+xlab = NULL, ylab = NULL, # the name of an axis
+cex.main = ### the size of the title
+)
+```
+```{r}
+type = c("p", "l", "b", "s", "o", "h", "n")
+```
+“p”: points
+“l”: lines
+“b”: both points and lines
+“o”: lines pass through points
+“h”: the lines between points and x-axis
+“n”: no content in the plot but plot region “‘
+
+- notes
+  - par()：擺放圖的排法
+- - -
+
+## __Apply family__
+
+> 1. __`apply(X, MARGIN, FUN,...)`__
+
+Returns a vector or array or list of values obtained by applying a function to margins of an array or a matrix
+- __<Example 1>__
+```{r}
+A <- matrix(rnorm(1500), 500, 3)
+
+apply(A, 2, sum); colSums(A)
+```
+- __<Example 2>__
+```{r}
+apply(A, 2, max)
+apply(A, 2, min, na.rm = TRUE)
+```
+
+- What if there are NA’s?
+```{r}
+B <- matrix(sample(1:100, 15), 5, 3)
+B[1, 2] <- NA
+B[3, 1] <- NA
+B <- data.frame(B)
+colnames(B) <- c("factor 1", "factor 2", "factor 3")
+apply(B, 2, mean)
+apply(B, 2, mean, na.rm = TRUE)
+
+```
+> 2. __`lapply(X, FUN,...)`__
+
+Returns a list of the same length as X, each element of which is the result of applying
+FUN to the corresponding element of X
+
+- __<Example 1>__
+```{r}
+C <- list(a = 1:10, beta = exp(-3:3))
+lapply(C, mean)
+```
+```{r}
+par(mfrow = c(1, 2))
+lapply(C, hist)
+```
+> 3. __`sapply(X, FUN,..., simplify = TRUE)`__
+
+```{r}
+sapply(C, summary, simplify = FALSE)
+```
+- Similarlly to lapply(X, Fun,...) if sapply(x, f, simplify = FALSE, USE.NAMES = FALSE)
+```{r}
+sapply(C, summary, simplify = FALSE)
+lapply(C, summary)
+```
+
+- - - 
+## __About Data__
+
+> 1. Remove NA
+
+- is.na(X)
+- complete.cases(X)
+```{r}
+no.na <- complete.cases(airquality)
+head(airquality[no.na,])
+```
+```{r}
+dat.no.na.1 <- airquality[no.na,]
+dim(dat.no.na.1)
+```
+
+- na.omit(X):
+```{r}
+dat.no.na.2 <- na.omit(airquality)
+dim(dat.no.na.2)
+```
+> 2. Using __`cut(...)`__ to group or to label items
+
+```{r}
+grouped2 <- cut(airquality[,3], 5,
+labels = c("G1", "G2", "G3", "G4", "G5"))
+head(grouped2)
+```
+  - Summarize the number of each group
+```{r}
+airquality$group <- grouped2
+table(grouped2)
+
+```
+  - order the dataset by the group: __`order(...)`___
+```{r}
+order.data.1 <- airquality[order(airquality$group),]
+head(order.data.1)
+```
+```{r}
+order.data.2 <- airquality[order(airquality$group,
+airquality$Temp), ]
+head(order.data.2)
+```
+
+> 3. Package: reshape2
+
+```{r}
+game <- c("G1", "G2", "G3", "G4", "G5")
+site <- c("M", "O", "L", "O", "L")
+Lin <- c(15, 6, 26, 22, 18)
+Jordan <- c(18, 32, 21, 25, 12)
+Peter <- c(10, 6, 22, 9, 12)
+ballgames <- data.frame(game, site, Lin, Jordan, Peter)
+```
+- Use __`melt(data, id.vars)`__ to reshape the dataset.
+```{r}
+library(reshape2)
+melt(ballgames, id.vars = c("game", "site"))
+
+```
+- Use __`dcast(dataset, formula, fun)`__ to show the specific data format.
+
+> 4. Merge data: __`merge(...)`__
+- intersection
+  - `merge(Lin.game, Jordan.game)`
+
+- union
+  - `merge(Lin.game, Jordan.game, all = TRUE)`
+
+
+> 5. Regression
+
+- Regression is used to show the relationship between independent variables and
+dependent variables.
+- Before data analysis, we should check the relation plot
+```{r}
+pairs(airquality[,c(1,3,4)])
+```
+
+- linear model: __`lm(formula, data)`__
+  
+  - formula: y ~ x1 + x2 (with intercept)
+  - formula: y ~ x1 + x2 - 1(no intercept)
+
+```{r}
+data1 <- airquality[1:120, ]
+data2 <- airquality[121:153, ]
+lm1 <- lm(Ozone ~ Temp, data = data1)
+lm2 <- lm(Ozone ~ Temp - 1, data = data1)
+```
+- Prediction by the fitted linear model
+```{r}
+y.predict <- predict(lm1, data2)
+y.predict
+```
+
+  - Performance of fitted model
+```{r}
+plot(airquality[, 4], airquality[, 1], pch = 19)
+abline(lm1)
+points(airquality[121:153, 4], y.predict, col = 2, pch = 19)
+```
+ 
+  - Performance of prediction
+```{r}
+plot(airquality[121:153, 1], y.predict, pch = 19)
+abline(0, 1)
+
+```
+
+> 6. Package: dplyr
+
+__`%>%`__ means that apply functions to an object.
+```{r}
+library(dplyr)
+y <- sample(1:100, 10)
+mean(y)
+y %>% mean()
+min(y)
+y %>% min()
+```
+
+## __Data processing__
+
+- __<Example 1>__
+```{r}
+train <- read.csv(file = "C:/Users/Meeting/Documents/R/reliability_training.csv")
+#getwd()
+head(train['Unit.ID'][1])
+f1 <- sum(train['Unit.ID']=="F1")
+f2 <- sum(train['Unit.ID']=="F2")
+f3 <- sum(train['Unit.ID']=="F3")
+f4 <- sum(train['Unit.ID']=="F4")
+f5 <- sum(train['Unit.ID']=="F5")
+f1+f2+f3+f4+f5
+t <- 1
+for (i in train['Unit.ID']){
+  t <-sum(i=="F5")
+}
+t
+```
+
+- __<Example 2>__
+
+A pair of fair dice are to be continually rolled until all the possible outcomes 2, 3, . . ., 12 have
+occurred at least once. Develop a function to collect the total number of rolls. Conduct the code for
+10000 times and give the average of the 10000 rolls. Is it possible that the total number of rolls is 11?
+How many times do you get the result that the number of rolls is 11? (You should use the following
+two functions.)
+```{r}
+times <- function(n){
+  roll <- c()
+  for (k in 1:n){
+    i <- 1
+    Sum <- c()
+    while (length(unique(Sum)) < 11){
+      X <- sample(1:6, 1)
+      Y <- sample(1:6, 1)
+      Sum <- c(Sum, sum(X,Y))
+      i <- i+1
+      if (i > n)break
+    }
+    roll <- c(roll, i)
+  }
+  return (mean(roll))
+}
+times(10000)
+```
+
+
